@@ -1,45 +1,71 @@
-try {
-	functionThatDoesNotExist();
-} catch (err) {
-	console.log("Something went wrong!", err);
+// Returning an anonymous function as a value of another function
+function greet(greeting) {
+	return function (name) {
+		return `${greeting}, ${name}.`;
+	};
 }
 
-// console.log("Did we make it?");
+//This method is basically capturing the return value (i.e another function) in a variable
+// const firstCall = greet("Hello");
+// console.log(firstCall("Promise"));
+// This other method is calling both functions at once
+console.log(greet("Hello")("Onyeka"));
 
-// console.log("======================");
+console.log(`=====================`);
 
-// const myself = {
-// 	firstName: "Promise",
-// 	lastName: "Morka",
-// };
-
-const displayInitials = function (user) {
-	let firstName;
-	let lastName;
-	try {
-		firstName = user.firstName[0].toUpperCase();
-		lastName = user.lastName[0].toUpperCase();
-	} catch (err) {
-		console.log("Something went wrong", err);
-	}
-	return `Hello ${firstName}${lastName}`;
-};
-console.log(displayInitials());
-
-console.log("an error is coming...");
-try {
-	throw "Oh no!";
-} catch (err) {
-	console.log("What happened?", err);
+function markWahlberg(animal, callback) {
+	console.log(`Hey ${animal}, how you doin'?`);
+	callback();
 }
 
-console.log("an error is coming...");
-try {
-	// This creates a new Error object that has inbuilt properties
-	throw new Error("Oh noo!!!");
-} catch (err) {
-	console.log("What kind of error?", err.name);
-	console.log("What is the message?", err.message);
-	console.log("Where did it happen?", err.stack);
-	console.dir(err);
+function marksCallback() {
+	console.log(`Say hi to your mother for me, alright?`);
 }
+
+markWahlberg("dog", marksCallback);
+
+function doMath(a, b, callback) {
+	return callback(a, b);
+}
+
+const output = doMath(4, 3, function (firstParameter, secondParameter) {
+	return firstParameter + secondParameter;
+});
+
+console.log(output);
+
+function greetILoveYou() {
+	console.log(`Hi, I love you!`);
+}
+
+function diss() {
+	console.log(`You are the worse`);
+}
+
+// Putting functions inside an array and destructuring the array
+let [funcs1, funcs2] = [greetILoveYou, diss];
+funcs1();
+funcs2();
+
+function repeatThreeTimes(func) {
+	func();
+	func();
+	func();
+}
+
+console.log(repeatThreeTimes(greetILoveYou));
+
+// RETURNING FUNCTION FROM A ANOTHER FUCNTION AND CALLING THEM
+function giveBirth() {
+	console.log("GIVING BIRTH");
+	return function cry() {
+		return "WAAAAAAHHH";
+	};
+}
+
+// You can call both functions like this
+console.log(giveBirth()());
+
+// or you can store the output in a variable and call them
+const theFirstCall = giveBirth();
+console.log(theFirstCall());
