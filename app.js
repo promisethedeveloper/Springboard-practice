@@ -69,3 +69,10 @@ console.log(giveBirth()());
 // or you can store the output in a variable and call them
 const theFirstCall = giveBirth();
 console.log(theFirstCall());
+
+greetILoveYou();
+console.log(setTimeout(diss, 3000));
+console.log(setInterval(diss, 3000));
+console.log(setTimeout(diss, 3000));
+
+greetILoveYou();
