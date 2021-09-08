@@ -1,181 +1,138 @@
-const ol = {};
+// "use strict";
 
-ol["name"] = "Oloye";
-
-ol.sayHi = function () {
-	return "Hi!";
-};
-const x = Object.keys(ol);
-console.log(x);
-const y = Object.values(ol);
-console.log(y);
-const z = Object.entries(ol);
-console.log(z);
-
-//POJO
-function getTriangleArea(a, b) {
-	return (a * b) / 2;
-}
-
-function getTriangleHypotenuse(a, b) {
-	return Math.sqrt(a * a + b * b);
-}
-
-let smallTriangle = {
-	a: 3,
-	b: 4,
-	getArea: function (a, b) {
-		return (this.a * this.b) / 2;
-	},
-	getHypotenuse: function (a, b) {
-		return Math.sqrt(this.a * this.a + this.b * this.b);
-	},
-};
-
-// CLASSES
-class Triangle {
-	constructor(a, b) {
-		this.a = a;
-		this.b = b;
-	}
-
-	getArea() {
-		return (this.a * this.b) / 2;
-	}
-
-	getHypotenuse() {
-		return Math.sqrt(this.a * this.a + this.b * this.b);
-	}
-}
-
-let myTri = new Triangle();
-myTri.a = 3;
-myTri.b = 4;
-myTri.getArea();
-myTri.getHypotenuse();
-
-const color = "red";
-const yo = {};
-yo["color"] = "blue";
-// yo.color = "blue";
-
-console.log(yo);
-
-const add = function (a, b) {
-	return a + b;
-};
-
-const mult = function (a, b) {
-	return a * b;
-};
-
-const subtract = function (a, b) {
-	return b - a;
-};
-// You can create an empty variable, then use dot notations to add key-value pairs
-// const myMath = {};
-// myMath.add = add;
-// myMath.mult = mult;
-// myMath.subtract = subtract;
-
-// You can create an empty object and put in the functions directly
-// const myMath = { add, mult, subtract };
-
-// You can also create the object of functions, which are called methods, all at once
-// const myMath = {
-// 	add: function (a, b) {
-// 		return a + b;
-// 	},
-// 	mult: function (a, b) {
-// 		return a * b;
-// 	},
-// 	subtract: function (a, b) {
-// 		return b - a;
+// const cat = {
+// 	name: "Blue",
+// 	breed: "Scottish Fold",
+// 	dance(typeOfDance) {
+// 		console.log(`The this keyword here is ${this}`);
+// 		console.log(this);
+// 		return `Meow, I am ${this.name} and I like to ${typeOfDance}.`;
 // 	},
 // };
 
-// USING ES6 SYNTAX
-const myMath = {
-	add(a, b) {
-		return a + b;
-	},
-	mult(a, b) {
-		return a * b;
-	},
-	subtract(a, b) {
-		return b - a;
+// const BluesDance = cat.dance;
+
+class Cat {
+	constructor(name, breed) {
+		this.name = name;
+		this.breed = breed;
+	}
+	dance(typeOfDance) {
+		console.log(`The this keyword here is ${this}`);
+		console.log(this);
+		return `Meow, I am ${this.name} and I like to ${typeOfDance}.`;
+	}
+}
+
+let smallCat = new Cat("fluffy", "African star");
+console.log(smallCat.dance("makossa"));
+
+// THE CALL METHOD
+const trophies = {
+	name: "Chelsea",
+	nameOfTrophy: "Champions league",
+	noOfTimes: 2,
+	statement: function (year) {
+		console.log(this);
+		return `${this.name} have won the ${this.nameOfTrophy} ${this.noOfTimes} times in less than ${year} years.`;
 	},
 };
 
-console.log(myMath.add(5, 10));
+// You can use .call() method to temporarily change the this keyword
 
-function Mathematics(a, b) {
-	this.a = a;
-	this.b = b;
-	this.getArea = function () {
-		return (this.a * this.b) / 2;
-	};
-	this.getHypotenuse = function () {
-		return Math.sqrt(this.a * this.a + this.b * this.b);
-	};
+// trophies.statement(8);
+const club = {
+	name: "Real Nadrid",
+	nameOfTrophy: "Champions league",
+	noOfTimes: 3,
+};
+
+// Calling the method this way sets the this keyword to the object calling the method
+// trophies.statement();
+// Calling the method this way, when not using the "use strict" mode sets the this keyword to the window object
+// const trophiesOtherCall = trophies.statement;
+// trophiesOtherCall;
+// The this object can be temporarily changed using the call keyword
+// trophies.statement.call(club, 20);
+
+// Using bind permanantly sets the this keyword to the object passed as an argument into it
+const bindCalls = trophies.statement.bind(club);
+
+const wins = {
+	name: "Bayern Munich",
+	nameOfTrophy: "Champions league",
+	noOfTimes: 2,
+	statement: bindCalls,
+};
+
+function applySalesTax(taxRate, price) {
+	return price + price * taxRate;
 }
 
-class Salutation {
-	greet() {
-		console.log("Hello from triangle");
-	}
-	display() {
-		console.log(`Triangle with sides of ${this.a} and ${this.b}`);
-	}
+const applySalesMarylandTax = applySalesTax.bind(null, 0.0725);
+const applySalesTexasTax = applySalesTax.bind(null, 0.0625);
+
+console.log(applySalesMarylandTax(1000));
+console.log(applySalesTexasTax(1000));
+
+const bobsMembership = {
+	name: "Bob",
+	total: 250,
+};
+
+const jillsMembership = {
+	name: "Jill",
+	total: 899,
+};
+
+function collectMonthlyFee(fee) {
+	const remaining = this.total - fee;
+	this.total = remaining;
+	return `${this.name} remaining balance: ${remaining}`;
 }
 
-class Geometry {
-	// this constructor method is automatically run
-	constructor(a, b, c) {
-		for (let side of [a, b, c]) {
-			if (!Number.isFinite(side) || side <= 0) {
-				throw new Error("Not a valid number");
-			}
+const collectBobsFee = collectMonthlyFee.bind(bobsMembership, 5);
+const collectJillsFee = collectMonthlyFee.bind(jillsMembership, 35);
+
+const dog = {
+	name: "Jack",
+	breed: "German Shepherd",
+	dance: function (danceStyle) {
+		console.log(`${this.name} is a ${this.breed} that loves to ${danceStyle}`);
+	},
+	play(...toys) {
+		for (let toy of toys) {
+			console.log(`${this.name} plays with ${toy}`);
 		}
-		this.a = a;
-		this.b = b;
-		this.side = c;
-	}
-	getArea() {
-		return this.a * this.b * this.side;
-	}
-	getAddittion() {
-		return this.a + this.b + this.side;
-	}
+	},
 	greet() {
-		return `Hello from Geometry`;
-	}
-	// you can call a method, inside another method
-	isBig() {
-		return this.getArea() > 50;
-	}
+		alert(`${this.name} says MEOW`);
+	},
+};
+
+// Using bind in eventListeners
+const btn = document.querySelector("#btn-1");
+btn.addEventListener("click", dog.greet.bind(dog));
+
+const btnA = document.querySelector("#a");
+const btnB = document.querySelector("#b");
+const btnC = document.querySelector("#c");
+
+function popUp(msg) {
+	alert(`Secret message is ${msg}`);
 }
 
-class anotherTriangle extends Geometry {
-	constructor(a, b, c) {
-		if (a * a + b * b !== c * c) {
-			throw new Error("Invalid hypotenuse");
-		}
-		super(a, b, c);
-		this.koko = c;
-	}
-	yo() {
-		return `I changed the parameter to ${this.koko}`;
-	}
-	greet() {
-		// console.log(`Hello from inside the anotherTriangle class`);
-		return "Right " + super.greet();
-	}
-}
+// btnA.addEventListener("click", function () {
+// 	popUp("BUTTON A SAYS HI!");
+// });
 
-const miniTriangle = new anotherTriangle(3, 4, 5);
-console.log(miniTriangle.getArea());
-console.log(miniTriangle.greet());
+// btnB.addEventListener("click", function () {
+// 	popUp("BUTTON B SAYS HI!");
+// });
+// btnC.addEventListener("click", function () {
+// 	popUp("BUTTON C SAYS HI!");
+// });
 
-const k = new anotherTriangle(3, 4, 5);
-console.log(k.yo());
+btnA.addEventListener("click", popUp.bind(null, "BUTTON A SAYS HI!"));
+btnB.addEventListener("click", popUp.bind(null, "BUTTON B SAYS HI!"));
+btnC.addEventListener("click", popUp.bind(null, "BUTTON C SAYS HI!"));
